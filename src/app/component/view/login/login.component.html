@@ -1,0 +1,11 @@
+<form class="container g-form" [formGroup]="form">
+    <input type="text" class="form-control mb-1"
+        placeholder="Login" formControlName="login" required>
+    <input type="password" class="form-control mb-2"
+        placeholder="Hasło" formControlName="password" required>
+    <button type="submit" class="btn btn-success w-100 mb-2">Log in</button>
+    <div class="w-100 mb-2">
+        <app-google-login></app-google-login>
+    </div>
+    <a class="btn btn-primary w-100" routerLink="/register">Register</a>
+</form>

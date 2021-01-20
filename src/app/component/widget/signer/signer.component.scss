@@ -1,0 +1,11 @@
+//regulate by aye
+$awatar-size: 25px;
+$container-size: 50px;
+$pt: 5px;
+
+.l-icon {
+    height: $container-size;
+    width: $container-size;
+    font-size: $awatar-size;
+    padding-top: $pt;
+}

@@ -1,0 +1,53 @@
+<form class="container g-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Login"
+        formControlName="login" required>
+        <div class="invalid-feedback">
+            <p *ngIf="email?.errors?.required">
+                Podaj login.
+            </p>
+            <p *ngIf="email?.errors?.maxlength">
+                Login za długi.
+            </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="email" class="form-control" placeholder="Email"
+            formControlName="email" required>
+        <div class="invalid-feedback">
+            <p *ngIf="email?.errors?.required">
+                Podaj email.
+            </p>
+            <p *ngIf="email?.errors?.pattern">
+                Podaj poprawny email.
+            </p>
+            <p *ngIf="email?.errors?.maxlength">
+                Email za długi.
+            </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" placeholder="Hasło"
+            formControlName="password" required>
+        <div class="invalid-feedback">
+            <p *ngIf="password?.errors?.required">
+                Podaj hasło.
+            </p>
+            <p *ngIf="password?.errors?.minlength">
+                Hasło za krótkie. Hasło powinno posiadać minimum 8 znaków.
+            </p>
+            <p *ngIf="password?.errors?.maxlength">
+                Hasło za długie.
+            </p>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" placeholder="Powtórz Hasło"
+            formControlName="rpassword" required>
+        <div class="invalid-feedback">Powtórz hasło.</div>
+    </div>
+    <div *ngIf="this.message.visible" [innerHTML]="this.message.content" [class]="this.message.class">
+    </div>
+    <button type="submit" class="btn btn-success w-100 mb-1" [disabled]="!form.valid">Register</button>
+    <a class="btn btn-primary w-100" routerLink="/login">Log in</a>
+</form>

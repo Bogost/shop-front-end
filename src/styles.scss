@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap',
+    'src/scss/variables';
+
+//passing bootstrap style to angular classes
+input.ng-invalid.ng-touched {
+    @extend .is-invalid;
+}
+
+input.ng-invalid.ng-touched {
+    @extend .is-valid;
+}
+//------------------------------------------
+
+body {
+    background-color: $bg-color;
+}
+
+.g-form {
+    max-width: 400px;
+}
