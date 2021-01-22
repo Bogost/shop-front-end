@@ -1,20 +1,30 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { catchError, map, multicast, retry } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { ActionReport } from './action-report';
 import { User } from './user';
+import { UserAccount } from './user-account';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  userAccount: UserAccount | undefined;
+  private loggedMsg: BehaviorSubject<string> = new BehaviorSubject<string>(this.loggedStatus());
 
-  constructor(private http: HttpClient) { }
+  loggedStatus(): string {
+    let logged = sessionStorage.getItem("logged");
+    return logged === null ? "" : logged;
+  }
+
+  constructor(private http: HttpClient) {
+    //check if user is logged or not
+  }
 
   private handleError(error: HttpErrorResponse) {
     if(error.error instanceof ErrorEvent) {
@@ -40,4 +50,16 @@ export class UserService {
         catchError(this.handleError)
       );
   }
+
+  login(ua: UserAccount) {
+    this.loggedMsg.next("");
+    this.userAccount = ua;
+  }
+
+  logout() {
+    this.userAccount?.logout();
+    this.userAccount = undefined;
+    this.loggedMsg.next("");
+  }
+
 }

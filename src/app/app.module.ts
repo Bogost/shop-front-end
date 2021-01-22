@@ -19,6 +19,7 @@ import { LoginComponent } from './component/view/login/login.component';
 import { HomeComponent } from './component/view/home/home.component';
 import { PageNotFoundComponent } from './component/view/page-not-found/page-not-found.component';
 import { GoogleLoginComponent } from './component/widget/google-login/google-login.component';
+import { KontoUzytkownikaComponent } from './component/view/konto-uzytkownika/konto-uzytkownika.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { GoogleLoginComponent } from './component/widget/google-login/google-log
     LoginComponent,
     HomeComponent,
     PageNotFoundComponent,
-    GoogleLoginComponent
+    GoogleLoginComponent,
+    KontoUzytkownikaComponent
   ],
   imports: [
     BrowserModule,
