@@ -6,7 +6,7 @@ import { UserService } from '../service/user.service';
   providedIn: 'root'
 })
 export class AntiauthGuard implements CanActivate {
-  logged: boolean = false;
+  logged: boolean = this.userService.loggedStatus.length > 0;
 
   constructor(private userService: UserService, private router: Router) {
   }

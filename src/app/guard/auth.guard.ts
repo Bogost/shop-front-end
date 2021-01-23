@@ -7,7 +7,6 @@ import { UserService } from '../service/user.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  logged: boolean = false;
 
   constructor(private userService: UserService, private router: Router) {
   }
@@ -16,8 +15,8 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean | UrlTree
   {
-    console.log("zalogowany: " + this.logged );
-    return this.logged ? true : this.router.parseUrl('/login');
+    console.log("zalogowany: " + this.userService.isLogged());
+    return this.userService.isLogged() ? true : this.router.parseUrl('/login');
   }
   
 }

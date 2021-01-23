@@ -14,32 +14,67 @@ export class GoogleUserService implements UserAccount {
   public error: string = "";
   public user: any;
 
-  constructor(private userService: UserService) {}
+  constructor() {}
 
   getName(): string {
     return this.user.getBasicProfile().getName();
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     if(!this.gapiSetup) {
       await this.initGoogleAuth();
     }
     this.authInstance.signOut();
+    this.authInstance.disconnect();
   }
-
-  logInUser(user: any): void{
-    this.userService.login(this);
-    this.user = user;
-
-    
-    console.log(user);
-  }
-
   // async init(){
   //   if(await this.checkIfUserAuthenticated()) {
   //     this.logInUser(this.authInstance?.currentUser.get());
   //   }
   // }
+
+  // async login(): Promise<any> {
+  //   console.log("google 1");
+  //   if(!this.gapiSetup) {
+  //     await this.initGoogleAuth();
+  //   }
+  //   console.log("google 2");
+  //   return new Promise(async () => {
+  //     //powoduje pojawienie się wyskakującego okienka
+  //     await this.authInstance?.signIn().then(
+  //       (user: any) => {
+  //         this.user = user;
+  //         console.log("google 3");
+  //       },
+  //       //wywołany m. in. gdy wyskakujące okienko zostanie zamknięte przez użytkownika
+  //       (error: string) => {
+  //         this.error = error;
+  //         console.log("google err");
+  //         throw error;
+  //       }
+  //     )
+  //   })
+  // }
+
+  async login(): Promise<any> {
+    console.log("google 1");
+    if(!this.gapiSetup) {
+      await this.initGoogleAuth();
+    }
+    console.log("google 2");
+    return this.authInstance?.signIn().then(
+      (user: any) => {
+        this.user = user;
+        console.log("google 3");
+      },
+      //wywołany m. in. gdy wyskakujące okienko zostanie zamknięte przez użytkownika
+      (error: string) => {
+        this.error = error;
+        console.log("google err");
+        throw error;
+      }
+    )
+  }
 
   async initGoogleAuth(): Promise<void> {
     return new Promise((resolve) => {
@@ -54,21 +89,6 @@ export class GoogleUserService implements UserAccount {
         });
       }
     )
-  }
-
-  async authenticate(): Promise<any> {
-    if(!this.gapiSetup) {
-      await this.initGoogleAuth();
-    }
-
-    return new Promise(async () => {
-      await this.authInstance?.signIn().then(
-        (user: any) => {
-          this.logInUser(user);
-        },
-        (error: string) => this.error = error,
-      )
-    })
   }
 
   // async checkIfUserAuthenticated(): Promise<boolean> {

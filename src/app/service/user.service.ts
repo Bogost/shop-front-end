@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
-import { catchError, map, multicast, retry } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { ActionReport } from './action-report';
+import { GoogleUserService } from './google-user.service';
 import { User } from './user';
 import { UserAccount } from './user-account';
 
@@ -15,15 +16,33 @@ import { UserAccount } from './user-account';
 })
 export class UserService {
   userAccount: UserAccount | undefined;
-  private loggedMsg: BehaviorSubject<string> = new BehaviorSubject<string>(this.loggedStatus());
+  private loggedMsg: BehaviorSubject<string> = new BehaviorSubject<string>(this.loggedStatus);
 
-  loggedStatus(): string {
+  get loggedStatus(): string {
     let logged = sessionStorage.getItem("logged");
+    console.log("logged status: " + logged);
     return logged === null ? "" : logged;
   }
 
-  constructor(private http: HttpClient) {
-    //check if user is logged or not
+  set loggedStatus(status: string) {
+    sessionStorage.setItem("logged", status);
+    this.loggedMsg.next(status);
+    console.log("change status for: " + status);
+  }
+
+  isLogged(): boolean {
+    return this.loggedStatus.length > 0;
+  }
+
+  //do refaktoryzacji (operacje niepotrzebnie się powtarzają)
+  constructor(private http: HttpClient, private gu: GoogleUserService) {
+
+    //po odświerzeniu jeżeli jest użytkownik zalogowany przez google,
+    // z automatu wywołuje wyskakujące okienko domyślnie blokowane przez przeglądarkę
+    if(this.isLogged())
+      this.login(this.loggedStatus);
+
+    console.log("logged: " + this.isLogged());
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -51,15 +70,36 @@ export class UserService {
       );
   }
 
-  login(ua: UserAccount) {
-    this.loggedMsg.next("");
-    this.userAccount = ua;
+  async login(ua: string) {
+    try {
+      console.log("begin login. type = " + ua);
+      switch(ua) {
+        case "google":
+          console.log("begin google login");
+          await this.gu.login();
+          console.log("google login 1");
+          //if no errors assign userAccount
+          this.userAccount = this.gu;
+          console.log("google login 2");
+          break;
+        default:
+          throw new Error("wrong login argument: " + ua);
+      }
+      console.log("change log state");
+      this.loggedStatus = ua;
+    } catch(error)
+    {
+      console.log(error);
+      throw error;
+    }
   }
 
-  logout() {
-    this.userAccount?.logout();
+  async logout() {
+    //await this.userAccount?.logout();
+    await this.gu.logout();
     this.userAccount = undefined;
-    this.loggedMsg.next("");
+    this.loggedStatus = "";
+    console.log("log out");
   }
 
 }
