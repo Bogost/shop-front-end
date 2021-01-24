@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: "https://localhost:3000/api",//not proper for development
+  endpoint: "/api",//not proper for development
 };
 
 /*

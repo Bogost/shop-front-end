@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CLIENT_ID } from 'secret/data';
 import { UserAccount } from './user-account';
-import { UserService } from './user.service';
 
 declare var gapi: any;
 
@@ -16,7 +15,10 @@ export class GoogleUserService implements UserAccount {
 
   constructor() {}
 
-  getName(): string {
+  async getName(): Promise<string> {
+    if(!this.gapiSetup) {
+      await this.initGoogleAuth();
+    }
     return this.user.getBasicProfile().getName();
   }
 
@@ -27,56 +29,34 @@ export class GoogleUserService implements UserAccount {
     this.authInstance.signOut();
     this.authInstance.disconnect();
   }
-  // async init(){
-  //   if(await this.checkIfUserAuthenticated()) {
-  //     this.logInUser(this.authInstance?.currentUser.get());
-  //   }
-  // }
 
-  // async login(): Promise<any> {
-  //   console.log("google 1");
-  //   if(!this.gapiSetup) {
-  //     await this.initGoogleAuth();
-  //   }
-  //   console.log("google 2");
-  //   return new Promise(async () => {
-  //     //powoduje pojawienie się wyskakującego okienka
-  //     await this.authInstance?.signIn().then(
-  //       (user: any) => {
-  //         this.user = user;
-  //         console.log("google 3");
-  //       },
-  //       //wywołany m. in. gdy wyskakujące okienko zostanie zamknięte przez użytkownika
-  //       (error: string) => {
-  //         this.error = error;
-  //         console.log("google err");
-  //         throw error;
-  //       }
-  //     )
-  //   })
-  // }
-
+  //if user is not logged - log in
   async login(): Promise<any> {
-    console.log("google 1");
     if(!this.gapiSetup) {
       await this.initGoogleAuth();
     }
-    console.log("google 2");
-    return this.authInstance?.signIn().then(
+    //check if user is signed in (no double login on restarts)
+    //for relogin
+    if(this.authInstance.isSignedIn.get())
+    {
+      this.user = this.authInstance.currentUser.get();
+      return;
+    }
+
+    return this.authInstance.signIn().then(
       (user: any) => {
         this.user = user;
-        console.log("google 3");
       },
       //wywołany m. in. gdy wyskakujące okienko zostanie zamknięte przez użytkownika
       (error: string) => {
         this.error = error;
-        console.log("google err");
         throw error;
       }
     )
   }
 
   async initGoogleAuth(): Promise<void> {
+    console.log("init google auth");
     return new Promise((resolve) => {
       gapi.load('auth2', resolve);
     }).then(

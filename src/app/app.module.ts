@@ -20,6 +20,11 @@ import { HomeComponent } from './component/view/home/home.component';
 import { PageNotFoundComponent } from './component/view/page-not-found/page-not-found.component';
 import { GoogleLoginComponent } from './component/widget/google-login/google-login.component';
 import { KontoUzytkownikaComponent } from './component/view/konto-uzytkownika/konto-uzytkownika.component';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokkenGetter() {
+  return sessionStorage.getItem("access_token");
+}
 
 @NgModule({
   declarations: [
@@ -44,7 +49,12 @@ import { KontoUzytkownikaComponent } from './component/view/konto-uzytkownika/ko
     HttpClientModule,
     AppRoutingModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokkenGetter,
+      }
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

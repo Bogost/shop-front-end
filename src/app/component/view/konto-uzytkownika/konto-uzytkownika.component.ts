@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -7,15 +8,18 @@ import { UserService } from 'src/app/service/user.service';
   styleUrls: ['./konto-uzytkownika.component.scss']
 })
 export class KontoUzytkownikaComponent implements OnInit {
-  name = this.userService.userAccount?.getName();
+  name: string | undefined;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.name = await this.userService.getUserName();
+    console.log(this.name);
   }
 
-  logOut() {
-    this.userService.logout()
+  async logOut() {
+    await this.userService.logout();
+    this.router.navigate(["/login"]);
   }
 
 }

@@ -6,7 +6,6 @@ import { UserService } from '../service/user.service';
   providedIn: 'root'
 })
 export class AntiauthGuard implements CanActivate {
-  logged: boolean = this.userService.loggedStatus.length > 0;
 
   constructor(private userService: UserService, private router: Router) {
   }
@@ -15,7 +14,7 @@ export class AntiauthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean | UrlTree
   {
-    return this.logged ? this.router.parseUrl('/konto_uzytkownika') : true;
+    return this.userService.isLogged() ? this.router.parseUrl('/konto_uzytkownika') : true;
   }
   
 }

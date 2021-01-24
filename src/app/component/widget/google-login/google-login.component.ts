@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GoogleUserService } from 'src/app/service/google-user.service';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/service/user.service';
-import { CLIENT_ID } from '../../../../../secret/data';
 
 //declare var gapi: any;
 
@@ -12,14 +11,16 @@ import { CLIENT_ID } from '../../../../../secret/data';
 })
 export class GoogleLoginComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   async ngOnInit(){
-    //this.gUser.init();
   }
 
   async authenticate() {
-    this.userService.login("google");
+    try {
+      await this.userService.login("google");
+      this.router.navigate(["/konto_uzytkownika"]);
+    } catch(error) {}
   }
 
 }

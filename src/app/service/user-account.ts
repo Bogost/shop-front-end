@@ -1,5 +1,4 @@
 export interface UserAccount {
-    getName: ()=>string;
+    getName: ()=>Promise<string>;
     logout: ()=>Promise<void>;
-    login: ()=>Promise<any>;
 }
