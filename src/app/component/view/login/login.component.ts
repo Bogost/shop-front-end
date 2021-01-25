@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit() {
+  async onSubmit() {
     try {
       if(this.password === null || this.login === null ) {
         console.error("No field");
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
       }
       let password: string = this.password.value;
       let login: string = this.login.value;
-      this.userService.login("our", {login: login, password: password} as OurUser);
+      await this.userService.login("our", {login: login, password: password} as OurUser);
     } catch(error)
     {
       let errorMessage = error;

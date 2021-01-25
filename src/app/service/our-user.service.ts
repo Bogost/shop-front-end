@@ -30,6 +30,8 @@ export class OurUserService implements UserAccount{
         tap( (report: ActionReport) => {
           if(report.success){
             sessionStorage.setItem("access_token", report.message);
+
+            console.log("success: " + report.message);
           } else {
             throw new Error(report.message);
           }
