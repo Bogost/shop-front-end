@@ -10,6 +10,8 @@ import { PageNotFoundComponent } from './component/view/page-not-found/page-not-
 import { PrzesylkiZagraniczneComponent } from './component/view/przesylki-zagraniczne/przesylki-zagraniczne.component';
 import { RegisterComponent } from './component/view/register/register.component';
 import { RegulaminComponent } from './component/view/regulamin/regulamin.component';
+import { WeryfikujComponent } from './component/view/weryfikuj/weryfikuj.component';
+import { WyslanoEmailWeryfikacyjnyComponent } from './component/view/wyslano-email-weryfikacyjny/wyslano-email-weryfikacyjny.component';
 import { AntiauthGuard } from './guard/antiauth.guard';
 import { AuthGuard } from './guard/auth.guard';
 
@@ -22,6 +24,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AntiauthGuard]},
   { path: 'register', component: RegisterComponent, canActivate: [AntiauthGuard]},
   { path: 'konto_uzytkownika', component: KontoUzytkownikaComponent, canActivate: [AuthGuard]},
+  { path: 'wyslano_email_weryfikacyjny', component: WyslanoEmailWeryfikacyjnyComponent},
+  { path: 'weryfikuj/:code', component: WeryfikujComponent},
   { path: '**', component: PageNotFoundComponent},
 ];
 

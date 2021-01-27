@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ActionReport } from 'src/app/service/action-report';
 import { Message } from 'src/app/service/message';
 import { User } from 'src/app/service/user';
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit {
 
   message = new Message();
 
-  constructor(private userService: UserService, private fb: FormBuilder) {}
+  constructor(private userService: UserService, private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
   }
@@ -64,6 +65,7 @@ export class RegisterComponent implements OnInit {
           if(result.success)
           {
             console.log(result)
+            this.router.navigate(["/wyslano_email_weryfikacyjny"]);
           }
           else {
             let errorMessage = "<strong>Ups! Coś poszło nie tak.</strong> Sprubuj ponownie później.";

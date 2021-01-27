@@ -21,6 +21,8 @@ import { PageNotFoundComponent } from './component/view/page-not-found/page-not-
 import { GoogleLoginComponent } from './component/widget/google-login/google-login.component';
 import { KontoUzytkownikaComponent } from './component/view/konto-uzytkownika/konto-uzytkownika.component';
 import { JwtModule } from '@auth0/angular-jwt';
+import { WyslanoEmailWeryfikacyjnyComponent } from './component/view/wyslano-email-weryfikacyjny/wyslano-email-weryfikacyjny.component';
+import { WeryfikujComponent } from './component/view/weryfikuj/weryfikuj.component';
 
 export function tokkenGetter() {
   return sessionStorage.getItem("access_token");
@@ -42,7 +44,9 @@ export function tokkenGetter() {
     HomeComponent,
     PageNotFoundComponent,
     GoogleLoginComponent,
-    KontoUzytkownikaComponent
+    KontoUzytkownikaComponent,
+    WyslanoEmailWeryfikacyjnyComponent,
+    WeryfikujComponent
   ],
   imports: [
     BrowserModule,

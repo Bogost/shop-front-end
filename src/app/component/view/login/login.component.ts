@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Message } from 'src/app/service/message';
 import { OurUser } from 'src/app/service/our-user';
 import { UserService } from 'src/app/service/user.service';
@@ -26,12 +27,12 @@ export class LoginComponent implements OnInit {
     return this.form.get("password");
   }
 
-  constructor(private fb: FormBuilder, private userService: UserService) { }
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
   }
 
-  async onSubmit() {
+  async submitLogin() {
     try {
       if(this.password === null || this.login === null ) {
         console.error("No field");
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit {
       let password: string = this.password.value;
       let login: string = this.login.value;
       await this.userService.login("our", {login: login, password: password} as OurUser);
+      this.router.navigate(["/konto_uzytkownika"]);
     } catch(error)
     {
       let errorMessage = error;

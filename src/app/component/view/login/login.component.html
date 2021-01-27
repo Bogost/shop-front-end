@@ -5,7 +5,7 @@
         placeholder="Hasło" formControlName="password" required>
     <div *ngIf="this.message.visible" [innerHTML]="this.message.content" [class]="this.message.class">
     </div>
-    <button type="submit" class="btn btn-success w-100 mb-2">Log in</button>
+    <button (click)="submitLogin()" class="btn btn-success w-100 mb-2">Log in</button>
     <div class="w-100 mb-2">
         <app-google-login></app-google-login>
     </div>

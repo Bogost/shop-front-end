@@ -26,12 +26,10 @@ export class OurUserService implements UserAccount{
     try {
       if(sessionStorage.getItem("access_token") !== null)
         return;
-      await this.loginRequest(user).pipe(
+      return this.loginRequest(user).pipe(
         tap( (report: ActionReport) => {
           if(report.success){
             sessionStorage.setItem("access_token", report.message);
-
-            console.log("success: " + report.message);
           } else {
             throw new Error(report.message);
           }
@@ -67,6 +65,5 @@ export class OurUserService implements UserAccount{
       .pipe(
         catchError(this.handleError)
       );
-      
   }
 }
