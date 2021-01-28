@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { ActionReport } from './action-report';
 import { OurUser } from './our-user';
 import { UserAccount } from './user-account';
+import { httpErrorHandler } from './error-handlers';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,12 @@ export class OurUserService implements UserAccount{
   constructor(private http: HttpClient) { }
 
   async getName(): Promise<string> {
-    return "Alfred";
+    let name: string = "";
+    await this.nameRequest().pipe(
+      tap( (n: string) => name = n),
+      first(),
+    ).toPromise();
+    return name;
   }
 
   async logout(): Promise<void> {
@@ -41,18 +47,6 @@ export class OurUserService implements UserAccount{
     }
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if(error.error instanceof ErrorEvent) {
-      //client side error like lost connection
-      console.error('Error: ', error.error.message);
-      return throwError('<strong>Problem z połączeniem.</strong> Sprawdź swoje połączenie z internetem, lub sprubój ponownie później.');
-    } else {
-      //backend returned error
-      console.error(`Backend returned code ${error.status}\n body was: ${error.error}`);
-      return throwError('<strong>Wystąpił problem.</strong> Spróbuj ponownie później');
-    }
-  }
-
   //access token in message
   loginRequest(user: OurUser): Observable<ActionReport> {
     let url = environment.endpoint + "/user/login";
@@ -63,7 +57,15 @@ export class OurUserService implements UserAccount{
     };
     return this.http.post<ActionReport>(url,user,httpOptions)
       .pipe(
-        catchError(this.handleError)
+        catchError(httpErrorHandler)
       );
+  }
+
+  //to refactor
+  nameRequest(): Observable<string> {
+    let url = environment.endpoint + "/user/name";
+    return this.http.get<string>(url).pipe(
+      catchError(httpErrorHandler),
+    );
   }
 }

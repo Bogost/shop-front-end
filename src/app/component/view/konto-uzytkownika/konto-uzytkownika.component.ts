@@ -13,7 +13,11 @@ export class KontoUzytkownikaComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   async ngOnInit() {
-    this.name = await this.userService.getUserName();
+    try {
+      this.name = await this.userService.getUserName();
+    } catch (error) {
+      console.error(error);
+    }
     console.log(this.name);
   }
 
